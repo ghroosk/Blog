@@ -166,14 +166,17 @@ MVVM模式中，**数据是独立于UI的**，数据和业务逻辑处于一个�
 
 ## 4. MVC MVP MVVM的异同
 在实际的情况下，我们很难去界定MVC、MVP和MVVM，他们三者有着一些相似的特性，从本质上来讲他们的目的都是分层解耦，结构上也都是分为3部分，其中都有View层和Model层，但是其职责又有一定的不同：
+
 |  | MVC | MVP | MVVM |
 | --- | --- | --- | --- |
 | Model | 典型的MVC中的Model与View存在耦合，一般情况下Model会以事件监听的方式将数据的改变告知View层|MVP下的Model与View没有任何的直接的耦合，其更像一个对外提供数据的仓库 | MVVM中的Model与MVP类似，只负责数据的封装，不同的是还会配合Binder绑定数据变化的监听 |
 | View | 典型MVC中的View层比较简单，主要是界面相关的逻辑，为了方便查询数据和监听数据的变化，View还会与Model有一定的耦合 | Model与View没有直接联系，同时在一些情况下View还会依赖于接口进一步解耦 | MVVM中的View除了处理UI相关的逻辑外还会配合Binder绑定UI变化的监听 |
+
 注：这里的Binder不是Android的Binder机制，这里是指负责View和Model之间的数据逻辑操作的处理；
 
 从上面的架构结构图，我们可以看到，MVC、MVP和MVVM三者中Model和View在演化的过程中遵循这么一个理念：耦合 -> 解耦 -> 实用，在MVC中View和Model还存在一定的耦合，而在MVP中则彻底抛开这个耦合并依赖于接口进一步解耦，到了MVVM，MVP该做的都做的差不多了，唯一不好的就是很多时候View和Model之间有大量重复的数据交互操作，MVVM则提出将这些操作进一步提取由框架来承担。<br>
 除了Model和View外，MVC、MVP和MVVM都将业务逻辑的处理单独放置在Controller、Presenter和ViewModel中，虽然名称不同但它们的本质都是一样的，只是在具体的业务处理以及职责划分上会有一定的差异：
+
 | Controller | Presenter | ViewModel |
 | --- | --- | --- |
 | Controller主要处理用户的交互逻辑，其根据View层的交互事件的不同，调用不同的Model层逻辑进行相关的数据操作或者直接进行View层的切换。对于Controller而言，并不关心View如何展示数据或状态，Controller只会通过修改对应的Model层，并由Model的事件机制来触发View的刷新. | Presenter的作用类似MVC中的Controller，但是其会反作用于View层，Model层的数据更新会先反馈到Presenter，再由Presenter处理并决定是否刷新以及刷新那个View，也就是说Presenter完全隔离View层和Model层，是一个名副其实的中间人角色. | ViewModel相对于Controller和Presenter的职责会更少，它将原本Controller和Presenter于View和Model交互的业务逻辑抽取交由Binder负责，Binder一般都会有对应的框架实现，对于开发者而言自己实现ViewModel的部分就相对变少了.|
